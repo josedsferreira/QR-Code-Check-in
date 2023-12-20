@@ -17,7 +17,6 @@ class MainActivity : AppCompatActivity() {
         scanButton.setOnClickListener {
             val intent = Intent(this, ScannerActivity::class.java)
             startActivity(intent)
-            //val database = Firebase.database("https://qrcodereader-d6599-default-rtdb.europe-west1.firebasedatabase.app/")
         }
 
     }
