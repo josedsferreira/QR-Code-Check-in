@@ -1,3 +1,10 @@
 <resources>
-    <string name="app_name">QRApp</string>
+    <string name="app_name">QR Code Reader</string>
+    <string name="login">Login</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="register">Registar</string>
+    <string name="loginNow">Clique aqui para fazer Login</string>
+    <string name="registerNow">Clique aqui para se registar</string>
+    <string name="ler_qr_code">Ler QR Code</string>
 </resources>
