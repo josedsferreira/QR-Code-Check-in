@@ -13,6 +13,11 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.database
 
 class Register : AppCompatActivity() {
 
@@ -33,6 +38,7 @@ class Register : AppCompatActivity() {
 
         val editTextEmail = findViewById<TextInputEditText>(R.id.email)
         val editTextPassword = findViewById<TextInputEditText>(R.id.password)
+        val editTextStaff = findViewById<TextInputEditText>(R.id.staffcode)
         val buttonRegister = findViewById<Button>(R.id.registerButton)
         val loginNow = findViewById<TextView>(R.id.loginNow)
 
@@ -46,51 +52,76 @@ class Register : AppCompatActivity() {
         buttonRegister.setOnClickListener {
             val email = editTextEmail.text.toString()
             val password = editTextPassword.text.toString()
+            val staff = editTextStaff.text.toString()
 
-            if (email.isEmpty() || password.isEmpty()) {
-                val message = "Insira um email e senha válidos"
-                val duration = Toast.LENGTH_SHORT
-
-                val toast = Toast.makeText(this, message, duration)
-                toast.show()
+            if (email.isEmpty() || password.isEmpty() || staff.isEmpty()) {
+                showToast("Insira um email, senha e código válidos")
                 return@setOnClickListener
-            }
-            else if (password.length < 6) {
-                val message = "A senha deve ter pelo menos 6 caracteres"
-                val duration = Toast.LENGTH_SHORT
-
-                val toast = Toast.makeText(this, message, duration)
-                toast.show()
+            } else if (password.length < 6) {
+                showToast("A senha deve ter pelo menos 6 caracteres")
                 return@setOnClickListener
             }
 
-            auth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this) { task ->
-                    if (task.isSuccessful) {
-                        // Sign in success, update UI with the signed-in user's information
-                        val user = auth.currentUser
-                        Toast.makeText(
-                            baseContext,
-                            "Conta Criada!",
-                            Toast.LENGTH_SHORT,
-                        ).show()
-                        val intent = Intent(this, MainActivity::class.java)
-                        startActivity(intent)
-                        finish()
-                    } else {
-                        // If sign in fails, display a message to the user.
-                        Toast.makeText(
-                            baseContext,
-                            "Registo falhou.",
-                            Toast.LENGTH_SHORT,
-                        ).show()
-
-                    }
-                }
-
-        } //end of login button caller
+            checkStaffAndRegister(email, password, staff)
+        }// fim do register button
 
 
 
     }
+
+    private fun checkStaffAndRegister(email: String, password: String, staff: String) {
+        val database = Firebase.database("https://qrcodereader-d6599-default-rtdb.europe-west1.firebasedatabase.app/")
+        val staffRef = database.getReference("staff").child(staff)
+
+        staffRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    // Staff code exists in the "staff" node
+                    val isRegistered = dataSnapshot.child("is_registered").getValue(Boolean::class.java)
+
+                    if (isRegistered == true) {
+                        // Staff is already registered
+                        showToast("Funcionario já registado")
+                    } else {
+                        // Staff is not registered, update the "is_registered" field to true
+                        staffRef.child("is_registered").setValue(true)
+
+                        // Continue with user registration
+                        registerUser(email, password)
+                    }
+                } else {
+                    // Staff code não existe
+                    showToast("Código de funcionário inválido.")
+                }
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                // Handle errors
+                println("Database error: ${databaseError.message}")
+            }
+        })
+    }
+
+    private fun showToast(message: String) {
+        val duration = Toast.LENGTH_SHORT
+        val toast = Toast.makeText(this@Register, message, duration)
+        toast.show()
+    }
+
+    private fun registerUser(email: String, password: String) {
+        auth.createUserWithEmailAndPassword(email, password)
+            .addOnCompleteListener(this) { task ->
+                if (task.isSuccessful) {
+                    // sucesso
+                    showToast("Conta Criada!")
+                    val intent = Intent(this@Register, MainActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                } else {
+                    // falhou
+                    showToast("Registo falhou.")
+                }
+            }
+    }
+
 }
