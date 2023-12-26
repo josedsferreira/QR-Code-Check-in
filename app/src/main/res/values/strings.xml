@@ -7,4 +7,6 @@
     <string name="loginNow">Clique aqui para fazer Login</string>
     <string name="registerNow">Clique aqui para se registar</string>
     <string name="ler_qr_code">Ler QR Code</string>
+    <string name="nome">Nome</string>
+    <string name="empresa">Empresa</string>
 </resources>

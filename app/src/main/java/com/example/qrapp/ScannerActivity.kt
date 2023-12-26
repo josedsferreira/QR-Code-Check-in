@@ -47,6 +47,7 @@ class ScannerActivity : AppCompatActivity() {
                         .addOnSuccessListener {
                             // A operação foi bem-sucedida
                             println("Status 'is_in' atualizado com sucesso.")
+
                         }
                         .addOnFailureListener { e ->
                             // A operação falhou
