@@ -23,16 +23,6 @@ class Register_qr : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register_qr)
 
-        auth = Firebase.auth
-
-        // Check if user is signed in (non-null) and update UI accordingly.
-        val currentUser = auth.currentUser
-        if (currentUser != null) {
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
-            finish()
-        }
-
         val editTextEmail = findViewById<TextInputEditText>(R.id.email)
         val editTextPassword = findViewById<TextInputEditText>(R.id.password)
         val buttonRegister = findViewById<Button>(R.id.registerButton)
@@ -80,12 +70,15 @@ class Register_qr : AppCompatActivity() {
         // Set the data to the new guest reference
         newGuestRef.setValue(guestData)
             .addOnSuccessListener {
-                // Data insertion successful
-                // Handle success, if needed
+                // sucesso
+                utilitarios.showToast("Convidado Registado!", this@Register_qr)
+                val intent = Intent(this@Register_qr, MainActivity::class.java)
+                startActivity(intent)
+                finish()
             }
             .addOnFailureListener {
                 // Data insertion failed
-                // Handle failure, if needed
+                utilitarios.showToast("Erro ao registar!", this@Register_qr)
             }
     }
 }

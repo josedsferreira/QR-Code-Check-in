@@ -18,6 +18,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.database
+import utilitarios
 
 class Register : AppCompatActivity() {
 
@@ -55,10 +56,10 @@ class Register : AppCompatActivity() {
             val staff = editTextStaff.text.toString()
 
             if (email.isEmpty() || password.isEmpty() || staff.isEmpty()) {
-                showToast("Insira um email, senha e código válidos")
+                utilitarios.showToast("Insira um email, senha e código válidos", this@Register)
                 return@setOnClickListener
             } else if (password.length < 6) {
-                showToast("A senha deve ter pelo menos 6 caracteres")
+                utilitarios.showToast("A senha deve ter pelo menos 6 caracteres", this@Register)
                 return@setOnClickListener
             }
 
@@ -81,7 +82,7 @@ class Register : AppCompatActivity() {
 
                     if (isRegistered == true) {
                         // Staff is already registered
-                        showToast("Funcionario já registado")
+                        utilitarios.showToast("Funcionario já registado", this@Register)
                     } else {
                         // Staff is not registered, update the "is_registered" field to true
                         staffRef.child("is_registered").setValue(true)
@@ -91,7 +92,7 @@ class Register : AppCompatActivity() {
                     }
                 } else {
                     // Staff code não existe
-                    showToast("Código de funcionário inválido.")
+                    utilitarios.showToast("Código de funcionário inválido.", this@Register)
                 }
             }
 
@@ -102,24 +103,20 @@ class Register : AppCompatActivity() {
         })
     }
 
-    private fun showToast(message: String) {
-        val duration = Toast.LENGTH_SHORT
-        val toast = Toast.makeText(this@Register, message, duration)
-        toast.show()
-    }
+
 
     private fun registerUser(email: String, password: String) {
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
                     // sucesso
-                    showToast("Conta Criada!")
+                    utilitarios.showToast("Conta Criada!", this@Register)
                     val intent = Intent(this@Register, MainActivity::class.java)
                     startActivity(intent)
                     finish()
                 } else {
                     // falhou
-                    showToast("Registo falhou.")
+                    utilitarios.showToast("Registo falhou!", this@Register)
                 }
             }
     }

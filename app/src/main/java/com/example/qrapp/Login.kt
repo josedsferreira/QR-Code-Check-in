@@ -11,6 +11,7 @@ import com.google.firebase.Firebase
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
+import utilitarios
 
 class Login : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
@@ -44,17 +45,12 @@ class Login : AppCompatActivity() {
         }
 
 
-
         buttonRegister.setOnClickListener {
             val email = editTextEmail.text.toString()
             val password = editTextPassword.text.toString()
 
             if (email.isEmpty() || password.isEmpty()) {
-                val message = "Insira um email e senha válidos"
-                val duration = Toast.LENGTH_SHORT
-
-                val toast = Toast.makeText(this, message, duration)
-                toast.show()
+                utilitarios.showToast("Insira um email e senha válidos", this@Login)
                 return@setOnClickListener
             }
 
@@ -67,12 +63,7 @@ class Login : AppCompatActivity() {
                         startActivity(intent)
                         finish()
                     } else {
-                        // If sign in fails, display a message to the user.
-                        Toast.makeText(
-                            baseContext,
-                            "Login falhou.",
-                            Toast.LENGTH_SHORT,
-                        ).show()
+                        utilitarios.showToast("Falha no login", this@Login)
                     }
                 }
 
