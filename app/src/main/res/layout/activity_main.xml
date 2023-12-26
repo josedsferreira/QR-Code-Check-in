@@ -24,6 +24,12 @@
         android:text="@string/ler_qr_code"
         android:layout_height="100dp"/>
 
+    <Button
+        android:id="@+id/registarqrbutton"
+        android:layout_width="match_parent"
+        android:text="@string/registar_convidado"
+        android:layout_height="100dp"/>
+
     <TextView
         android:id="@+id/userDetails"
         android:text="User details"

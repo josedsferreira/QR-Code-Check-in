@@ -18,6 +18,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         val userDetails = findViewById<TextView>(R.id.userDetails)
+        val regbutton = findViewById<Button>(R.id.registarqrbutton)
+
         auth = Firebase.auth
         val currentUser = auth.currentUser
         if (currentUser == null) {
@@ -42,6 +44,10 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, Login::class.java)
             startActivity(intent)
             finish()
+        }
+        regbutton.setOnClickListener {
+            val intent = Intent(this, Register_qr::class.java)
+            startActivity(intent)
         }
 
     }

@@ -36,14 +36,7 @@ class Register_qr : AppCompatActivity() {
         val editTextEmail = findViewById<TextInputEditText>(R.id.email)
         val editTextPassword = findViewById<TextInputEditText>(R.id.password)
         val buttonRegister = findViewById<Button>(R.id.registerButton)
-        val loginNow = findViewById<TextView>(R.id.loginNow)
 
-        loginNow.setOnClickListener {
-            // intent to login activity
-            val intent = Intent(this, Login::class.java)
-            startActivity(intent)
-            finish()
-        }
 
         buttonRegister.setOnClickListener {
             val name = editTextEmail.text.toString()

@@ -9,4 +9,5 @@
     <string name="ler_qr_code">Ler QR Code</string>
     <string name="nome">Nome</string>
     <string name="empresa">Empresa</string>
+    <string name="registar_convidado">Registar Convidado</string>
 </resources>
