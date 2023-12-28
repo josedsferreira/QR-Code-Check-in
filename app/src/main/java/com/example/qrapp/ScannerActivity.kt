@@ -3,6 +3,8 @@ package com.example.qrapp
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.TextView
+import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.Firebase
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.database
@@ -41,9 +43,12 @@ class ScannerActivity : AppCompatActivity() {
                 fun updateIsInStatus(guestId: String, isIn: Boolean) {
                     // Referência ao nó do convidado específico
                     val guestNodeRef = guestsRef.child(guestId)
-                    val c = guestNodeRef.child("company")
-                    val n = guestNodeRef.child("name")
-                    utilitarios.showToast("Nome: $n, Empresa: $c", this@ScannerActivity)
+                    val c = guestNodeRef.child("company").toString()
+                    val n = guestNodeRef.child("name").toString()
+                    val textn=findViewById<TextView>(R.id.name)
+                    val textc=findViewById<TextView>(R.id.company)
+                    textn.text=n
+                    textc.text=c
                     // Atualize o valor do campo 'is_in'
                     guestNodeRef.child("is_in").setValue(isIn)
                         .addOnSuccessListener {
