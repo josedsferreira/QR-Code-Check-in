@@ -43,7 +43,7 @@ class ScannerActivity : AppCompatActivity() {
                     val guestNodeRef = guestsRef.child(guestId)
                     val c = guestNodeRef.child("company")
                     val n = guestNodeRef.child("name")
-                    utilitarios.showToast("Conta Criada! Nome: $n, Empresa: $c", this@ScannerActivity)
+                    utilitarios.showToast("Nome: $n, Empresa: $c", this@ScannerActivity)
                     // Atualize o valor do campo 'is_in'
                     guestNodeRef.child("is_in").setValue(isIn)
                         .addOnSuccessListener {
