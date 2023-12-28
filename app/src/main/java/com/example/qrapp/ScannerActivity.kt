@@ -43,23 +43,32 @@ class ScannerActivity : AppCompatActivity() {
                 fun updateIsInStatus(guestId: String, isIn: Boolean) {
                     // Referência ao nó do convidado específico
                     val guestNodeRef = guestsRef.child(guestId)
-                    val c = guestNodeRef.child("company").toString()
-                    val n = guestNodeRef.child("name").toString()
-                    val textn=findViewById<TextView>(R.id.name)
-                    val textc=findViewById<TextView>(R.id.company)
-                    textn.text=n
-                    textc.text=c
-                    // Atualize o valor do campo 'is_in'
-                    guestNodeRef.child("is_in").setValue(isIn)
-                        .addOnSuccessListener {
-                            // A operação foi bem-sucedida
-                            println("Status 'is_in' atualizado com sucesso.")
 
+                    // Obter os valores de 'company' e 'name'
+                    guestNodeRef.child("company").get().addOnSuccessListener { companySnapshot ->
+                        val company = companySnapshot.value as? String
+
+                        guestNodeRef.child("name").get().addOnSuccessListener { nameSnapshot ->
+                            val name = nameSnapshot.value as? String
+
+                            // Atualizar as TextViews com os valores obtidos
+                            val textn = findViewById<TextView>(R.id.name)
+                            val textc = findViewById<TextView>(R.id.company)
+                            textn.text = name
+                            textc.text = company
+
+                            // Atualize o valor do campo 'is_in'
+                            guestNodeRef.child("is_in").setValue(isIn)
+                                .addOnSuccessListener {
+                                    // A operação foi bem-sucedida
+                                    println("Status 'is_in' atualizado com sucesso.")
+                                }
+                                .addOnFailureListener { e ->
+                                    // A operação falhou
+                                    println("Erro ao atualizar o status 'is_in': ${e.message}")
+                                }
                         }
-                        .addOnFailureListener { e ->
-                            // A operação falhou
-                            println("Erro ao atualizar o status 'is_in': ${e.message}")
-                        }
+                    }
                 }
                 updateIsInStatus(scannedData,true)
             } else {
