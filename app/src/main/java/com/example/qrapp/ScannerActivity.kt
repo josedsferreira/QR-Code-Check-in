@@ -23,9 +23,10 @@ class ScannerActivity : AppCompatActivity() {
         integrator.setCameraId(0)  // camara traseira
         integrator.setBeepEnabled(false)
         integrator.setBarcodeImageEnabled(true)
-
         // Start scanning
         integrator.initiateScan()
+
+        layoutState(3) // iniciar com layout de loading
     } // fim do onCreate
 
     // Handle the result in onActivityResult
@@ -40,17 +41,20 @@ class ScannerActivity : AppCompatActivity() {
                 val guestsRef: DatabaseReference = database.getReference("guests")
 
                 updateIsInStatus(guestsRef, scannedData,true)
+
                 val lqrbutton = findViewById<Button>(R.id.lerqr)
                 lqrbutton.setOnClickListener {
                     val intent = Intent(this, ScannerActivity::class.java)
                     startActivity(intent)
+                    finish()
                 }
             } else {
                 // Handle no result da db
-                layoutErro(1)
+                layoutState(1)
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data)
+            layoutState(1)
         }
     } // fim do onActivityResult
 
@@ -83,7 +87,7 @@ class ScannerActivity : AppCompatActivity() {
                             .addOnSuccessListener {
                                 // A operação foi bem-sucedida
                                 println("Status 'is_in' atualizado com sucesso.")
-                                layoutErro(0)
+                                layoutState(0)
                             }
                             .addOnFailureListener { e ->
                                 // A operação falhou
@@ -96,22 +100,24 @@ class ScannerActivity : AppCompatActivity() {
                         val textc = findViewById<TextView>(R.id.company)
                         textn.text = name
                         textc.text = company
-                        layoutErro(2)
+                        layoutState(2)
                     } else {
                         // Erro, o convidado não existe na db
                         println("Guest not found in the database.")
-                        layoutErro(1)
+                        layoutState(1)
                     }
                 }
             }
         }
     } // fim do updateIsInStatus
 
-    private fun layoutErro(erro: Int = 0) {
-        //erro = 0 -> não existe erro, esconder o layout de erro
-        //erro = 1 -> convidado não existe
-        //erro = 2 -> convidado já deu entrada
+    private fun layoutState(state: Int = 0) {
+        //state = 0 -> não existe erro, esconder o layout de erro
+        //state = 1 -> convidado não existe
+        //state = 2 -> convidado já deu entrada
+        //state = 3 -> mostrar o layout de loading
 
+        val progbar = findViewById<View>(R.id.progressBar)
         val erroView = findViewById<TextView>(R.id.errorView)
         val titulo = findViewById<TextView>(R.id.tituloView)
         val nomeView = findViewById<TextView>(R.id.nomeView)
@@ -119,8 +125,10 @@ class ScannerActivity : AppCompatActivity() {
         val empresaView = findViewById<TextView>(R.id.empresaView)
         val empresaText = findViewById<TextView>(R.id.company)
         val erroJaEntrou = findViewById<TextView>(R.id.erroJaEntrou)
+        val lqrbutton = findViewById<Button>(R.id.lerqr)
 
-        if (erro == 0) { // não existe erro
+        if (state == 0) { // não existe erro
+            progbar.visibility = View.GONE
             erroView.visibility = View.GONE
             erroJaEntrou.visibility = View.GONE
             titulo.visibility = View.VISIBLE
@@ -128,7 +136,9 @@ class ScannerActivity : AppCompatActivity() {
             nameText.visibility = View.VISIBLE
             empresaView.visibility = View.VISIBLE
             empresaText.visibility = View.VISIBLE
-        } else if(erro == 1){ // convidado não existe
+            lqrbutton.visibility = View.VISIBLE
+        } else if(state == 1){ // convidado não existe
+            progbar.visibility = View.GONE
             erroView.visibility = View.VISIBLE
             erroJaEntrou.visibility = View.GONE
             titulo.visibility = View.GONE
@@ -136,7 +146,9 @@ class ScannerActivity : AppCompatActivity() {
             nameText.visibility = View.GONE
             empresaView.visibility = View.GONE
             empresaText.visibility = View.GONE
-        } else if (erro == 2) { // convidado já deu entrada
+            lqrbutton.visibility = View.VISIBLE
+        } else if (state == 2) { // convidado já deu entrada
+            progbar.visibility = View.GONE
             erroJaEntrou.visibility = View.VISIBLE
             erroView.visibility = View.GONE
             titulo.visibility = View.VISIBLE
@@ -144,7 +156,19 @@ class ScannerActivity : AppCompatActivity() {
             nameText.visibility = View.VISIBLE
             empresaView.visibility = View.VISIBLE
             empresaText.visibility = View.VISIBLE
+            lqrbutton.visibility = View.VISIBLE
+        } else if (state == 3) { // mostrar o layout de loading
+            progbar.visibility = View.VISIBLE
+            erroView.visibility = View.GONE
+            erroJaEntrou.visibility = View.GONE
+            titulo.visibility = View.GONE
+            nomeView.visibility = View.GONE
+            nameText.visibility = View.GONE
+            empresaView.visibility = View.GONE
+            empresaText.visibility = View.GONE
+            lqrbutton.visibility = View.GONE
         }
     } // fim do layoutErro
+
 
 }
