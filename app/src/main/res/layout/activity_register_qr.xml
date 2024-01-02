@@ -10,7 +10,7 @@
     tools:context=".Register">
 
     <TextView
-        android:text="@string/register"
+        android:text="@string/registar_convidado"
         android:textSize="25sp"
         android:textStyle="bold"
         android:gravity="center"

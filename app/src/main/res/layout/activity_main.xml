@@ -10,7 +10,7 @@
     tools:context=".MainActivity">
 
     <TextView
-        android:text="Leitor de QR Code"
+        android:text="QR Code Check-in"
         android:textSize="25sp"
         android:textStyle="bold"
         android:gravity="center"
@@ -21,12 +21,14 @@
     <Button
         android:id="@+id/scanButton"
         android:layout_width="match_parent"
+        android:textSize="25sp"
         android:text="@string/ler_qr_code"
         android:layout_height="100dp"/>
 
     <Button
         android:id="@+id/registarqrbutton"
         android:layout_width="match_parent"
+        android:textSize="25sp"
         android:text="@string/registar_convidado"
         android:layout_height="100dp"/>
 

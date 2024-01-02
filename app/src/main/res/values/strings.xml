@@ -10,4 +10,6 @@
     <string name="nome">Nome</string>
     <string name="empresa">Empresa</string>
     <string name="registar_convidado">Registar Convidado</string>
+    <string name="erro_convidado_n_existe">Erro: Convidado não existe</string>
+    <string name="convidado_ja_entrou">Atenção: O convidado já entrou!</string>
 </resources>

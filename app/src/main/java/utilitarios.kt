@@ -9,6 +9,6 @@ class utilitarios {
             val toast = Toast.makeText(context, message, duration)
             toast.show()
         }
+    } // fim do companion object
 
-    }
 }
